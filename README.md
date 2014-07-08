@@ -18,9 +18,13 @@ appropriate library path for your other rust projects.
 ## Rust integration
 
 I hope that this library can eventually be a standard part of the Rust
-distribution -- see rust-lang/rust#14031 and rust-lang/rust#6816.  It works
-fine as a standalone library, but if it were incorporated, then even Rust's
-own libraries could define probe points.
+distribution -- see the rust [pull request][libprobe-pr] and [original
+enhancement issue][dtrace-issue].  It works fine as a standalone library,
+but if it were incorporated, then even Rust's own libraries could define
+probe points.
+
+[libprobe-pr]: https://github.com/rust-lang/rust/pull/14031
+[dtrace-issue]: https://github.com/rust-lang/rust/issues/6816
 
 ## License
 
