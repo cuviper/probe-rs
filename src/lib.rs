@@ -24,12 +24,12 @@
 //!
 //! ```rust
 //! #![feature(phase)]
-//! #[phase(syntax)]
+//! #[phase(plugin)]
 //! extern crate probe;
 //! fn main() {
 //!     probe!(foo, begin);
 //!     let mut total = 0;
-//!     for i in range(0, 100) {
+//!     for i in range(0u, 100) {
 //!         total += i;
 //!         probe!(foo, loop, i, total);
 //!     }
@@ -90,13 +90,13 @@
 //! $2 = 1035
 //! ```
 
-#![crate_id = "probe#0.11-pre"]
+#![crate_id = "probe#0.11.0"]
 #![crate_type = "dylib"]
 #![experimental]
 #![license = "MIT/ASL2"]
 #![doc(html_logo_url = "http://www.rust-lang.org/logos/rust-logo-128x128-blk-v2.png",
        html_favicon_url = "http://www.rust-lang.org/favicon.ico",
-       html_root_url = "http://static.rust-lang.org/doc/master")]
+       html_root_url = "http://doc.rust-lang.org/0.11.0/")]
 
 #![feature(asm, macro_rules)]
 
@@ -127,7 +127,7 @@ mod platform;
 ///
 /// ```
 /// #![feature(phase)]
-/// #[phase(syntax)]
+/// #[phase(plugin)]
 /// extern crate probe;
 /// fn main() {
 ///     probe!(foo, main);
