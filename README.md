@@ -1,4 +1,4 @@
-# Static instrumentation probe! macro for Rust
+# libprobe: Static probes for Rust
 
 With the `probe!` macro, programmers can place static instrumentation
 points in their code to mark events of interest.  These are compiled into
