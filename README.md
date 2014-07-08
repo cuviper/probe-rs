@@ -21,3 +21,10 @@ I hope that this library can eventually be a standard part of the Rust
 distribution -- see rust-lang/rust#14031 and rust-lang/rust#6816.  It works
 fine as a standalone library, but if it were incorporated, then even Rust's
 own libraries could define probe points.
+
+## License
+
+libprobe follows the same license choices as The Rust Project itself, in
+order to ease a future merge.
+
+See LICENSE-APACHE, LICENSE-MIT, and COPYRIGHT for details.
