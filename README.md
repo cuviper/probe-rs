@@ -8,7 +8,8 @@ be present in all builds, and only activated using those external tools.
 
 ## Documentation
 
-TODO
+Generated documentation for libprobe can be found
+[here](https://cuviper.github.io/rust-libprobe/doc/probe/index.html).
 
 ## Building libprobe
 
