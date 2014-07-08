@@ -100,6 +100,11 @@
 
 #![feature(asm, macro_rules)]
 
+#![no_std]
+
+#[cfg(test)] extern crate std;
+#[cfg(test)] extern crate native;
+
 mod platform;
 
 /// Define a static probe point.
