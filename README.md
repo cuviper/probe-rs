@@ -16,6 +16,13 @@ Generated documentation for libprobe can be found
 Simply run `rustc src/lib.rs` and copy the libprobe shared object to an
 appropriate library path for your other rust projects.
 
+If you're using cargo, just add this to your `Cargo.toml`:
+
+```toml
+[dependencies.probe]
+git = "https://github.com/cuviper/rust-libprobe.git"
+```
+
 ## Rust integration
 
 I hope that this library can eventually be a standard part of the Rust
