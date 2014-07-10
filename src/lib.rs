@@ -90,7 +90,7 @@
 //! $2 = 1035
 //! ```
 
-#![crate_id = "probe#0.11.0"]
+#![crate_name = "probe"]
 #![crate_type = "dylib"]
 #![experimental]
 #![license = "MIT/ASL2"]
