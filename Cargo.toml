@@ -1,0 +1,10 @@
+[project]
+
+name = "probe"
+version = "0.1.0"
+authors = [ "cuviper@gmail.com" ]
+
+[[lib]]
+
+name = "probe"
+crate_type = [ "dylib" ]
