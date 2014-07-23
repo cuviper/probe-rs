@@ -8,8 +8,10 @@ be present in all builds, and only activated using those external tools.
 
 ## Documentation
 
-Generated documentation for libprobe can be found
-[here](https://cuviper.github.io/rust-libprobe/doc/probe/index.html).
+Generated documentation for libprobe can be found on
+[GitHub](https://cuviper.github.io/rust-libprobe/doc/probe/)
+or on
+[Rust CI](http://www.rust-ci.org/cuviper/rust-libprobe/doc/probe/).
 
 ## Building libprobe
 
@@ -22,6 +24,12 @@ If you're using cargo, just add this to your `Cargo.toml`:
 [dependencies.probe]
 git = "https://github.com/cuviper/rust-libprobe.git"
 ```
+
+Nightly build status is available on Rust CI:
+[![build status][ci-image]][ci-link]
+
+[ci-image]: https://api.travis-ci.org/cuviper/rust-libprobe.png
+[ci-link]: http://www.rust-ci.org/cuviper/rust-libprobe
 
 ## Rust integration
 
