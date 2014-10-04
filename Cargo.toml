@@ -2,9 +2,9 @@
 
 name = "probe"
 version = "0.1.0"
-authors = [ "cuviper@gmail.com" ]
+authors = ["Josh Stone <cuviper@gmail.com>"]
 
-[[lib]]
+[lib]
 
 name = "probe"
-crate_type = [ "dylib" ]
+plugin = true
