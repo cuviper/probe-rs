@@ -1,20 +1,11 @@
-env:
-    global:
-          - secure: PFa5ypdXegba1AdlskgbVvsl1YSnfUjHup9M5WmwALKukF80qaU5OMF4eGGLfnGBXWhWWYdM5C8CEpXqHRv/KxHBm5/oVxteUPwoRt7FCF6DL/E/Johw31vxCwmjmthOE0OxbX+99NNBszOsYx7vkuCmxA7WmW5UGFG7afZJc4I=
-
-before_install:
-  - sudo add-apt-repository --yes ppa:hansjorg/rust
-  - sudo add-apt-repository --yes ppa:cmrx64/cargo
-  - sudo apt-get update -qq
-
-install:
-  - sudo apt-get install -qq rust-nightly cargo
-
+language: rust
 script:
-  - cargo build
-  - cargo test
-  - rustdoc src/lib.rs
-  - rustdoc src/lib.rs --test -L target
-
-after_script:
-  - curl http://www.rust-ci.org/artifacts/put?t=$RUSTCI_TOKEN | sh
+  - cargo build --verbose
+  - cargo test --verbose
+  - cargo doc --verbose
+after_success: |
+  mv target/doc . &&
+  (curl http://www.rust-ci.org/artifacts/put?t=$RUSTCI_TOKEN | sh)
+env:
+  global:
+  - secure: PFa5ypdXegba1AdlskgbVvsl1YSnfUjHup9M5WmwALKukF80qaU5OMF4eGGLfnGBXWhWWYdM5C8CEpXqHRv/KxHBm5/oVxteUPwoRt7FCF6DL/E/Johw31vxCwmjmthOE0OxbX+99NNBszOsYx7vkuCmxA7WmW5UGFG7afZJc4I=
