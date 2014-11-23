@@ -103,7 +103,6 @@
 #![no_std]
 
 #[cfg(test)] extern crate std;
-#[cfg(test)] extern crate native;
 
 mod platform;
 
