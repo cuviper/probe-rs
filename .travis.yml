@@ -9,3 +9,5 @@ after_success: |
 env:
   global:
   - secure: PFa5ypdXegba1AdlskgbVvsl1YSnfUjHup9M5WmwALKukF80qaU5OMF4eGGLfnGBXWhWWYdM5C8CEpXqHRv/KxHBm5/oVxteUPwoRt7FCF6DL/E/Johw31vxCwmjmthOE0OxbX+99NNBszOsYx7vkuCmxA7WmW5UGFG7afZJc4I=
+notifications:
+  on_success: never
