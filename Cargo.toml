@@ -4,6 +4,13 @@ name = "probe"
 version = "0.1.0"
 authors = ["Josh Stone <cuviper@gmail.com>"]
 
+description = "Static instrumentation probes"
+documentation = "http://www.rust-ci.org/cuviper/rust-libprobe/doc/probe/"
+homepage = "https://github.com/cuviper/rust-libprobe"
+repository = "https://github.com/cuviper/rust-libprobe"
+
+license = "Apache-2.0/MIT"
+
 [lib]
 
 name = "probe"
