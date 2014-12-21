@@ -144,4 +144,4 @@ mod platform;
 macro_rules! probe(
     ($provider:ident, $name:ident $(, $arg:expr)*)
     => (platform_probe!($provider, $name $(, $arg)*));
-)
+);

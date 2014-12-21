@@ -136,7 +136,7 @@ macro_rules! platform_probe(
                  "-8@$0 -8@$1 -8@$2 -8@$3 -8@$4 -8@$5 -8@$6 -8@$7 -8@$8 -8@$9 -8@$10 -8@$11",
                  $arg1, $arg2, $arg3, $arg4, $arg5, $arg6, $arg7, $arg8, $arg9, $arg10, $arg11,
                  $arg12));
-)
+);
 
 #[cfg(target_word_size = "32")]
 #[macro_export]
@@ -144,7 +144,7 @@ macro_rules! sdt_asm(
     ($provider:ident, $name:ident, $argstr:tt $(, $arg:expr)*)
     => (unsafe {
         _sdt_asm!(".4byte", $provider, $name, $argstr $(, $arg)*);
-    }))
+    }));
 
 #[cfg(target_word_size = "64")]
 #[macro_export]
@@ -152,7 +152,7 @@ macro_rules! sdt_asm(
     ($provider:ident, $name:ident, $argstr:tt $(, $arg:expr)*)
     => (unsafe {
         _sdt_asm!(".8byte", $provider, $name, $argstr $(, $arg)*);
-    }))
+    }));
 
 // Since we can't #include <sys/sdt.h>, we have to reinvent it...
 // but once you take out the C/C++ type handling, there's not a lot to it.
@@ -191,4 +191,4 @@ _.stapsdt.base: .space 1
             : // options
                 "volatile"
         )
-    ))
+    ));
