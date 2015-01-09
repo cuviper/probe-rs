@@ -65,9 +65,10 @@
 //
 
 #[macro_export]
+#[macro_use(sdt_asm)]
 macro_rules! platform_probe(
-    ($provider:ident, $name:ident)
-    => (sdt_asm!($provider, $name, ""));
+    ($provider:ident, $name:ident,)
+    => (sdt_asm!($provider, $name, "",));
 
     ($provider:ident, $name:ident, $arg1:expr)
     => (sdt_asm!($provider, $name,
@@ -138,27 +139,29 @@ macro_rules! platform_probe(
                  $arg12));
 );
 
-#[cfg(target_word_size = "32")]
+#[cfg(target_pointer_width = "32")]
 #[macro_export]
+#[macro_use(_sdt_asm)]
 macro_rules! sdt_asm(
-    ($provider:ident, $name:ident, $argstr:tt $(, $arg:expr)*)
+    ($provider:ident, $name:ident, $argstr:tt, $($arg:expr),*)
     => (unsafe {
-        _sdt_asm!(".4byte", $provider, $name, $argstr $(, $arg)*);
+        _sdt_asm!(".4byte", $provider, $name, $argstr, $($arg),*);
     }));
 
-#[cfg(target_word_size = "64")]
+#[cfg(target_pointer_width = "64")]
 #[macro_export]
+#[macro_use(_sdt_asm)]
 macro_rules! sdt_asm(
-    ($provider:ident, $name:ident, $argstr:tt $(, $arg:expr)*)
+    ($provider:ident, $name:ident, $argstr:tt, $($arg:expr),*)
     => (unsafe {
-        _sdt_asm!(".8byte", $provider, $name, $argstr $(, $arg)*);
+        _sdt_asm!(".8byte", $provider, $name, $argstr, $($arg),*);
     }));
 
 // Since we can't #include <sys/sdt.h>, we have to reinvent it...
 // but once you take out the C/C++ type handling, there's not a lot to it.
 #[macro_export]
 macro_rules! _sdt_asm(
-    ($addr:tt, $provider:ident, $name:ident, $argstr:tt $(, $arg:expr)*) => (
+    ($addr:tt, $provider:ident, $name:ident, $argstr:tt, $($arg:expr),*) => (
         asm!(concat!(r#"
 990:    nop
         .pushsection .note.stapsdt,"?","note"

@@ -28,7 +28,7 @@
 //! fn main() {
 //!     probe!(foo, begin);
 //!     let mut total = 0;
-//!     for i in range(0u, 100) {
+//!     for i in 0..100 {
 //!         total += i;
 //!         probe!(foo, loop, i, total);
 //!     }
@@ -139,7 +139,10 @@ mod platform;
 /// }
 /// ```
 #[macro_export]
+#[macro_use(platform_probe)]
 macro_rules! probe(
-    ($provider:ident, $name:ident $(, $arg:expr)*)
-    => (platform_probe!($provider, $name $(, $arg)*));
+    ($provider:ident, $name:ident)
+    => (platform_probe!($provider, $name,));
+    ($provider:ident, $name:ident, $($arg:expr),*)
+    => (platform_probe!($provider, $name, $($arg),*));
 );
