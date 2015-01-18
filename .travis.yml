@@ -4,10 +4,12 @@ script:
   - cargo test --verbose
   - cargo doc --verbose
 after_success: |
+  [ $TRAVIS_BRANCH = master ] &&
+  [ $TRAVIS_PULL_REQUEST = false ] &&
   mv target/doc . &&
-  (curl http://www.rust-ci.org/artifacts/put?t=$RUSTCI_TOKEN | sh)
+  curl http://www.rust-ci.org/artifacts/put?t=$RUSTCI_TOKEN | sh
 env:
   global:
-  - secure: PFa5ypdXegba1AdlskgbVvsl1YSnfUjHup9M5WmwALKukF80qaU5OMF4eGGLfnGBXWhWWYdM5C8CEpXqHRv/KxHBm5/oVxteUPwoRt7FCF6DL/E/Johw31vxCwmjmthOE0OxbX+99NNBszOsYx7vkuCmxA7WmW5UGFG7afZJc4I=
+  - secure: npi4R8si4+dWTxSTUw79H2APRYjMJefZBAOWlIdYgXouFQVedIQzPOHI6MEtNyINdvYnU3F4PE+LozUDPD1QOBU8fadGZVinzZBmCuIDnSODR2bHR7+o3dUqHPS8gz2MmhBjHKlbTmBnDIcTXRK6KVaGljMfrQ+hcQ8Mb6tzb+U=
 notifications:
   on_success: never
