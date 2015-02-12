@@ -3,6 +3,7 @@ script:
   - cargo build --verbose
   - cargo test --verbose
   - cargo doc --verbose
+  - readelf -n target/examples/loop | awk '{print} /stapsdt/{c+=1} END{if (c!=3) exit 1}'
 after_success: |
   [ $TRAVIS_BRANCH = master ] &&
   [ $TRAVIS_PULL_REQUEST = false ] &&
