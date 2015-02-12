@@ -1,7 +1,7 @@
 [project]
 
 name = "probe"
-version = "0.1.1"
+version = "0.1.2"
 authors = ["Josh Stone <cuviper@gmail.com>"]
 
 description = "Static instrumentation probes"
