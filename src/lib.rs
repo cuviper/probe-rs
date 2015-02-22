@@ -23,6 +23,7 @@
 //! intermediate total.
 //!
 //! ```rust
+//! #![feature(asm)]
 //! #[macro_use] #[no_link]
 //! extern crate probe;
 //! fn main() {
@@ -124,6 +125,7 @@ mod platform;
 /// # Example
 ///
 /// ```
+/// #![feature(asm)]
 /// #[macro_use] #[no_link]
 /// extern crate probe;
 /// fn main() {
