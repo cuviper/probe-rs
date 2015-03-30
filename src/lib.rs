@@ -131,7 +131,7 @@ mod platform;
 /// fn main() {
 ///     probe!(foo, main);
 ///
-///     let x = 42i;
+///     let x = 42;
 ///     probe!(foo, show_x, x);
 ///
 ///     let y = Some(x);
