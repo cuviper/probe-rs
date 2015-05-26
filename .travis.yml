@@ -1,4 +1,5 @@
 language: rust
+rust: nightly # for unstable feature asm
 script:
   - cargo build --verbose
   - cargo test --verbose
