@@ -15,3 +15,4 @@ license = "Apache-2.0/MIT"
 
 name = "probe"
 plugin = true
+crate-type = ["rlib"]
