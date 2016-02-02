@@ -97,7 +97,6 @@
        html_root_url = "http://doc.rust-lang.org/nightly/")]
 
 #![feature(asm)]
-#![feature(no_std)]
 
 #![no_std]
 
