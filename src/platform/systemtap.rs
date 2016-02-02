@@ -65,7 +65,6 @@
 //
 
 #[macro_export]
-#[macro_use(sdt_asm)]
 macro_rules! platform_probe(
     ($provider:ident, $name:ident,)
     => (sdt_asm!($provider, $name, "",));
@@ -141,7 +140,6 @@ macro_rules! platform_probe(
 
 #[cfg(target_pointer_width = "32")]
 #[macro_export]
-#[macro_use(_sdt_asm)]
 macro_rules! sdt_asm(
     ($provider:ident, $name:ident, $argstr:tt, $($arg:expr),*)
     => (unsafe {
@@ -150,7 +148,6 @@ macro_rules! sdt_asm(
 
 #[cfg(target_pointer_width = "64")]
 #[macro_export]
-#[macro_use(_sdt_asm)]
 macro_rules! sdt_asm(
     ($provider:ident, $name:ident, $argstr:tt, $($arg:expr),*)
     => (unsafe {

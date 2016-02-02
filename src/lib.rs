@@ -141,7 +141,6 @@ mod platform;
 /// }
 /// ```
 #[macro_export]
-#[macro_use(platform_probe)]
 macro_rules! probe(
     ($provider:ident, $name:ident)
     => (platform_probe!($provider, $name,));
