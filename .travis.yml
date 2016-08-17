@@ -4,13 +4,6 @@ script:
   - cargo build --verbose
   - cargo test --verbose
   - cargo doc --verbose
-after_success: |
-  [ $TRAVIS_BRANCH = master ] &&
-  [ $TRAVIS_PULL_REQUEST = false ] &&
-  mv target/doc . &&
-  curl http://www.rust-ci.org/artifacts/put?t=$RUSTCI_TOKEN | sh
-env:
-  global:
-  - secure: npi4R8si4+dWTxSTUw79H2APRYjMJefZBAOWlIdYgXouFQVedIQzPOHI6MEtNyINdvYnU3F4PE+LozUDPD1QOBU8fadGZVinzZBmCuIDnSODR2bHR7+o3dUqHPS8gz2MmhBjHKlbTmBnDIcTXRK6KVaGljMfrQ+hcQ8Mb6tzb+U=
 notifications:
-  on_success: never
+  email:
+    on_success: never
