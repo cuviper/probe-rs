@@ -18,6 +18,6 @@ fn check_notes() {
     assert!(output.status.success());
     assert!(output.stderr.is_empty());
     let count = String::from_utf8_lossy(&output.stdout).lines()
-        .filter(|line| line.contains("stapsdt")).count();
+        .filter(|line| line.contains("NT_STAPSDT")).count();
     assert_eq!(count, 2);
 }
