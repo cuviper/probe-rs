@@ -30,11 +30,12 @@
 //
 // DEVELOPER NOTES
 //
-// Arguments are currently type-casted as i64, because that directly maps to
-// SystemTap's long, no matter the architecture.  However, if we could figure
-// out types here, they could be annotated more specifically, for example an
-// argstr of "4@$0 -2@$1" indicates u32 and i16 respectively.  Any pointer
-// would be fine too, like *c_char, simply 4@ or 8@ for target_word_size.
+// Arguments are currently type-casted as isize for the supposed maximum
+// register size, whereas SystemTap's long is i64 no matter the architecture.
+// However, if we could figure out types here, they could be annotated more
+// specifically, for example an argstr of "4@$0 -2@$1" indicates u32 and i16
+// respectively.  Any pointer would be fine too, like *c_char, simply 4@ or 8@
+// for target_word_size.
 //
 // The macros in sdt.h don't know types either, so they split each argument
 // into two asm inputs, roughly:
@@ -71,94 +72,110 @@ macro_rules! platform_probe(
 
     ($provider:ident, $name:ident, $arg1:expr)
     => (sdt_asm!($provider, $name,
-                 "-8@$0",
+                 "-8@{0}",
                  $arg1));
 
     ($provider:ident, $name:ident, $arg1:expr, $arg2:expr)
     => (sdt_asm!($provider, $name,
-                 "-8@$0 -8@$1",
+                 "-8@{0} -8@{1}",
                  $arg1, $arg2));
 
     ($provider:ident, $name:ident, $arg1:expr, $arg2:expr, $arg3:expr)
     => (sdt_asm!($provider, $name,
-                 "-8@$0 -8@$1 -8@$2",
+                 "-8@{0} -8@{1} -8@{2}",
                  $arg1, $arg2, $arg3));
 
     ($provider:ident, $name:ident, $arg1:expr, $arg2:expr, $arg3:expr, $arg4:expr)
     => (sdt_asm!($provider, $name,
-                 "-8@$0 -8@$1 -8@$2 -8@$3",
+                 "-8@{0} -8@{1} -8@{2} -8@{3}",
                  $arg1, $arg2, $arg3, $arg4));
 
     ($provider:ident, $name:ident, $arg1:expr, $arg2:expr, $arg3:expr, $arg4:expr, $arg5:expr)
     => (sdt_asm!($provider, $name,
-                 "-8@$0 -8@$1 -8@$2 -8@$3 -8@$4",
+                 "-8@{0} -8@{1} -8@{2} -8@{3} -8@{4}",
                  $arg1, $arg2, $arg3, $arg4, $arg5));
 
     ($provider:ident, $name:ident, $arg1:expr, $arg2:expr, $arg3:expr, $arg4:expr, $arg5:expr,
      $arg6:expr)
     => (sdt_asm!($provider, $name,
-                 "-8@$0 -8@$1 -8@$2 -8@$3 -8@$4 -8@$5",
+                 "-8@{0} -8@{1} -8@{2} -8@{3} -8@{4} -8@{5}",
                  $arg1, $arg2, $arg3, $arg4, $arg5, $arg6));
 
     ($provider:ident, $name:ident, $arg1:expr, $arg2:expr, $arg3:expr, $arg4:expr, $arg5:expr,
      $arg6:expr, $arg7:expr)
     => (sdt_asm!($provider, $name,
-                 "-8@$0 -8@$1 -8@$2 -8@$3 -8@$4 -8@$5 -8@$6",
+                 "-8@{0} -8@{1} -8@{2} -8@{3} -8@{4} -8@{5} -8@{6}",
                  $arg1, $arg2, $arg3, $arg4, $arg5, $arg6, $arg7));
 
     ($provider:ident, $name:ident, $arg1:expr, $arg2:expr, $arg3:expr, $arg4:expr, $arg5:expr,
      $arg6:expr, $arg7:expr, $arg8:expr)
     => (sdt_asm!($provider, $name,
-                 "-8@$0 -8@$1 -8@$2 -8@$3 -8@$4 -8@$5 -8@$6 -8@$7",
+                 "-8@{0} -8@{1} -8@{2} -8@{3} -8@{4} -8@{5} -8@{6} -8@{7}",
                  $arg1, $arg2, $arg3, $arg4, $arg5, $arg6, $arg7, $arg8));
 
     ($provider:ident, $name:ident, $arg1:expr, $arg2:expr, $arg3:expr, $arg4:expr, $arg5:expr,
      $arg6:expr, $arg7:expr, $arg8:expr, $arg9:expr)
     => (sdt_asm!($provider, $name,
-                 "-8@$0 -8@$1 -8@$2 -8@$3 -8@$4 -8@$5 -8@$6 -8@$7 -8@$8",
+                 "-8@{0} -8@{1} -8@{2} -8@{3} -8@{4} -8@{5} -8@{6} -8@{7} -8@{8}",
                  $arg1, $arg2, $arg3, $arg4, $arg5, $arg6, $arg7, $arg8, $arg9));
 
     ($provider:ident, $name:ident, $arg1:expr, $arg2:expr, $arg3:expr, $arg4:expr, $arg5:expr,
      $arg6:expr, $arg7:expr, $arg8:expr, $arg9:expr, $arg10:expr)
     => (sdt_asm!($provider, $name,
-                 "-8@$0 -8@$1 -8@$2 -8@$3 -8@$4 -8@$5 -8@$6 -8@$7 -8@$8 -8@$9",
+                 "-8@{0} -8@{1} -8@{2} -8@{3} -8@{4} -8@{5} -8@{6} -8@{7} -8@{8} -8@{9}",
                  $arg1, $arg2, $arg3, $arg4, $arg5, $arg6, $arg7, $arg8, $arg9, $arg10));
 
     ($provider:ident, $name:ident, $arg1:expr, $arg2:expr, $arg3:expr, $arg4:expr, $arg5:expr,
      $arg6:expr, $arg7:expr, $arg8:expr, $arg9:expr, $arg10:expr, $arg11:expr)
     => (sdt_asm!($provider, $name,
-                 "-8@$0 -8@$1 -8@$2 -8@$3 -8@$4 -8@$5 -8@$6 -8@$7 -8@$8 -8@$9 -8@$10",
+                 "-8@{0} -8@{1} -8@{2} -8@{3} -8@{4} -8@{5} -8@{6} -8@{7} -8@{8} -8@{9} -8@{10}",
                  $arg1, $arg2, $arg3, $arg4, $arg5, $arg6, $arg7, $arg8, $arg9, $arg10, $arg11));
 
     ($provider:ident, $name:ident, $arg1:expr, $arg2:expr, $arg3:expr, $arg4:expr, $arg5:expr,
      $arg6:expr, $arg7:expr, $arg8:expr, $arg9:expr, $arg10:expr, $arg11:expr, $arg12:expr)
     => (sdt_asm!($provider, $name,
-                 "-8@$0 -8@$1 -8@$2 -8@$3 -8@$4 -8@$5 -8@$6 -8@$7 -8@$8 -8@$9 -8@$10 -8@$11",
+                 "-8@{0} -8@{1} -8@{2} -8@{3} -8@{4} -8@{5} -8@{6} -8@{7} -8@{8} -8@{9} -8@{10} -8@{11}",
                  $arg1, $arg2, $arg3, $arg4, $arg5, $arg6, $arg7, $arg8, $arg9, $arg10, $arg11,
                  $arg12));
 );
 
-#[cfg(target_pointer_width = "32")]
+#[cfg(target_arch = "x86")]
 #[macro_export]
 macro_rules! sdt_asm(
     ($provider:ident, $name:ident, $argstr:tt, $($arg:expr),*)
     => (unsafe {
-        _sdt_asm!(".4byte", $provider, $name, $argstr, $($arg),*);
+        _sdt_asm!(".4byte", options(att_syntax), $provider, $name, $argstr, $($arg),*);
     }));
 
-#[cfg(target_pointer_width = "64")]
+#[cfg(all(target_pointer_width = "32", not(target_arch = "x86")))]
 #[macro_export]
 macro_rules! sdt_asm(
     ($provider:ident, $name:ident, $argstr:tt, $($arg:expr),*)
     => (unsafe {
-        _sdt_asm!(".8byte", $provider, $name, $argstr, $($arg),*);
+        _sdt_asm!(".4byte", options(), $provider, $name, $argstr, $($arg),*);
+    }));
+
+#[cfg(target_arch = "x86_64")]
+#[macro_export]
+macro_rules! sdt_asm(
+    ($provider:ident, $name:ident, $argstr:tt, $($arg:expr),*)
+    => (unsafe {
+        _sdt_asm!(".8byte", options(att_syntax), $provider, $name, $argstr, $($arg),*);
+    }));
+
+#[cfg(all(target_pointer_width = "64", not(target_arch = "x86_64")))]
+#[macro_export]
+macro_rules! sdt_asm(
+    ($provider:ident, $name:ident, $argstr:tt, $($arg:expr),*)
+    => (unsafe {
+        _sdt_asm!(".8byte", options(), $provider, $name, $argstr, $($arg),*);
     }));
 
 // Since we can't #include <sys/sdt.h>, we have to reinvent it...
 // but once you take out the C/C++ type handling, there's not a lot to it.
 #[macro_export]
 macro_rules! _sdt_asm(
-    ($addr:tt, $provider:ident, $name:ident, $argstr:tt, $($arg:expr),*) => (
+    ($addr:tt, options $opt:tt, $provider:ident, $name:ident, $argstr:tt, $($arg:expr),*) => (
         asm!(concat!(r#"
 990:    nop
         .pushsection .note.stapsdt,"?","note"
@@ -183,12 +200,8 @@ _.stapsdt.base: .space 1
         .popsection
 .endif
 "#
-            )
-            : // output operands
-            : // input operands
-                $("nor"(($arg) as i64)),*
-            : // clobbers
-            : // options
-                "volatile"
+            ),
+            $(in(reg) (($arg) as isize) ,)*
+            options $opt,
         )
     ));
