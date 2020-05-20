@@ -5,7 +5,7 @@ version = "0.1.6"
 authors = ["Josh Stone <cuviper@gmail.com>"]
 
 description = "Static instrumentation probes"
-documentation = "https://cuviper.github.io/rust-libprobe/doc/probe/"
+documentation = "https://docs.rs/probe/"
 homepage = "https://github.com/cuviper/rust-libprobe"
 repository = "https://github.com/cuviper/rust-libprobe"
 

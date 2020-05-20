@@ -6,7 +6,7 @@ platform-specific implementations, e.g. SystemTap SDT on Linux.  Probes are
 designed to have negligible overhead during normal operation, so they can
 be present in all builds, and only activated using those external tools.
 
-[Documentation](https://cuviper.github.io/rust-libprobe/doc/probe/)
+[Documentation](https://docs.rs/probe/)
 
 ## Building libprobe
 
