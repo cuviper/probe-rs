@@ -65,6 +65,7 @@
 // that log!() checks log_enabled!() first.
 //
 
+#[doc(hidden)]
 #[macro_export]
 macro_rules! platform_probe(
     ($provider:ident, $name:ident,)
@@ -140,6 +141,7 @@ macro_rules! platform_probe(
 );
 
 #[cfg(target_arch = "x86")]
+#[doc(hidden)]
 #[macro_export]
 macro_rules! sdt_asm(
     ($provider:ident, $name:ident, $argstr:tt, $($arg:expr),*)
@@ -148,6 +150,7 @@ macro_rules! sdt_asm(
     }));
 
 #[cfg(all(target_pointer_width = "32", not(target_arch = "x86")))]
+#[doc(hidden)]
 #[macro_export]
 macro_rules! sdt_asm(
     ($provider:ident, $name:ident, $argstr:tt, $($arg:expr),*)
@@ -156,6 +159,7 @@ macro_rules! sdt_asm(
     }));
 
 #[cfg(target_arch = "x86_64")]
+#[doc(hidden)]
 #[macro_export]
 macro_rules! sdt_asm(
     ($provider:ident, $name:ident, $argstr:tt, $($arg:expr),*)
@@ -164,6 +168,7 @@ macro_rules! sdt_asm(
     }));
 
 #[cfg(all(target_pointer_width = "64", not(target_arch = "x86_64")))]
+#[doc(hidden)]
 #[macro_export]
 macro_rules! sdt_asm(
     ($provider:ident, $name:ident, $argstr:tt, $($arg:expr),*)
@@ -173,6 +178,7 @@ macro_rules! sdt_asm(
 
 // Since we can't #include <sys/sdt.h>, we have to reinvent it...
 // but once you take out the C/C++ type handling, there's not a lot to it.
+#[doc(hidden)]
 #[macro_export]
 macro_rules! _sdt_asm(
     ($addr:tt, options $opt:tt, $provider:ident, $name:ident, $argstr:tt, $($arg:expr),*) => (
