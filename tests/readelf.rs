@@ -1,8 +1,6 @@
 #![feature(asm)]
 
-#[macro_use] #[no_link]
-extern crate probe;
-
+use probe::probe;
 use std::env;
 use std::process::Command;
 

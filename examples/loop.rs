@@ -1,6 +1,5 @@
 #![feature(asm)]
-#[macro_use] #[no_link]
-extern crate probe;
+use probe::probe;
 fn main() {
     probe!(foo, begin);
     let mut total = 0;

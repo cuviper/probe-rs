@@ -24,8 +24,7 @@
 //!
 //! ```rust
 //! #![feature(asm)]
-//! #[macro_use] #[no_link]
-//! extern crate probe;
+//! use probe::probe;
 //! fn main() {
 //!     probe!(foo, begin);
 //!     let mut total = 0;
@@ -100,8 +99,6 @@
 
 #![no_std]
 
-#[cfg(test)] extern crate std;
-
 mod platform;
 
 /// Define a static probe point.
@@ -124,8 +121,7 @@ mod platform;
 ///
 /// ```
 /// #![feature(asm)]
-/// #[macro_use] #[no_link]
-/// extern crate probe;
+/// use probe::probe;
 /// fn main() {
 ///     probe!(foo, main);
 ///
@@ -142,7 +138,7 @@ mod platform;
 #[macro_export]
 macro_rules! probe(
     ($provider:ident, $name:ident)
-    => (platform_probe!($provider, $name,));
+    => ($crate::platform_probe!($provider, $name,));
     ($provider:ident, $name:ident, $($arg:expr),*)
-    => (platform_probe!($provider, $name, $($arg),*));
+    => ($crate::platform_probe!($provider, $name, $($arg),*));
 );
