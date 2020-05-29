@@ -52,11 +52,9 @@
 // This might be a possible direction for Rust SDT to follow.  For LLVM
 // InlineAsm, the string would look like "${0:n}@$1", but we need the size/sign
 // for that first input, and that must be a numeric constant no matter what
-// optimization level we're at.
-//
-// NB: If there were also a way to generate the positional "$0 $1 ..." indexes,
-// then we could lose the manually-unrolled duplication below.  For now, expand
-// up to 12 args, the same limit as sys/sdt.h.
+// optimization level we're at. With Rust RFC 2850 `asm!`, it might be possible
+// to use positional `{}@{}` with a `const` operand for the size, but calling
+// things like `mem::size_of::<T>()` is still hard when we don't know `T`.
 //
 // FIXME semaphores - SDT can define a short* that debuggers will increment when
 // they attach, and decrement on detach.  Thus a probe_enabled!(provider,name)
@@ -69,111 +67,29 @@
 #[macro_export]
 macro_rules! platform_probe(
     ($provider:ident, $name:ident,)
-    => ($crate::sdt_asm!($provider, $name, "",));
+    => ($crate::sdt_asm!($provider, $name,));
 
-    ($provider:ident, $name:ident, $arg1:expr)
+    ($provider:ident, $name:ident, $arg1:expr, $($arg:expr,)*)
     => ($crate::sdt_asm!($provider, $name,
-                 "-8@{0}",
-                 $arg1));
-
-    ($provider:ident, $name:ident, $arg1:expr, $arg2:expr)
-    => ($crate::sdt_asm!($provider, $name,
-                 "-8@{0} -8@{1}",
-                 $arg1, $arg2));
-
-    ($provider:ident, $name:ident, $arg1:expr, $arg2:expr, $arg3:expr)
-    => ($crate::sdt_asm!($provider, $name,
-                 "-8@{0} -8@{1} -8@{2}",
-                 $arg1, $arg2, $arg3));
-
-    ($provider:ident, $name:ident, $arg1:expr, $arg2:expr, $arg3:expr, $arg4:expr)
-    => ($crate::sdt_asm!($provider, $name,
-                 "-8@{0} -8@{1} -8@{2} -8@{3}",
-                 $arg1, $arg2, $arg3, $arg4));
-
-    ($provider:ident, $name:ident, $arg1:expr, $arg2:expr, $arg3:expr, $arg4:expr, $arg5:expr)
-    => ($crate::sdt_asm!($provider, $name,
-                 "-8@{0} -8@{1} -8@{2} -8@{3} -8@{4}",
-                 $arg1, $arg2, $arg3, $arg4, $arg5));
-
-    ($provider:ident, $name:ident, $arg1:expr, $arg2:expr, $arg3:expr, $arg4:expr, $arg5:expr,
-     $arg6:expr)
-    => ($crate::sdt_asm!($provider, $name,
-                 "-8@{0} -8@{1} -8@{2} -8@{3} -8@{4} -8@{5}",
-                 $arg1, $arg2, $arg3, $arg4, $arg5, $arg6));
-
-    ($provider:ident, $name:ident, $arg1:expr, $arg2:expr, $arg3:expr, $arg4:expr, $arg5:expr,
-     $arg6:expr, $arg7:expr)
-    => ($crate::sdt_asm!($provider, $name,
-                 "-8@{0} -8@{1} -8@{2} -8@{3} -8@{4} -8@{5} -8@{6}",
-                 $arg1, $arg2, $arg3, $arg4, $arg5, $arg6, $arg7));
-
-    ($provider:ident, $name:ident, $arg1:expr, $arg2:expr, $arg3:expr, $arg4:expr, $arg5:expr,
-     $arg6:expr, $arg7:expr, $arg8:expr)
-    => ($crate::sdt_asm!($provider, $name,
-                 "-8@{0} -8@{1} -8@{2} -8@{3} -8@{4} -8@{5} -8@{6} -8@{7}",
-                 $arg1, $arg2, $arg3, $arg4, $arg5, $arg6, $arg7, $arg8));
-
-    ($provider:ident, $name:ident, $arg1:expr, $arg2:expr, $arg3:expr, $arg4:expr, $arg5:expr,
-     $arg6:expr, $arg7:expr, $arg8:expr, $arg9:expr)
-    => ($crate::sdt_asm!($provider, $name,
-                 "-8@{0} -8@{1} -8@{2} -8@{3} -8@{4} -8@{5} -8@{6} -8@{7} -8@{8}",
-                 $arg1, $arg2, $arg3, $arg4, $arg5, $arg6, $arg7, $arg8, $arg9));
-
-    ($provider:ident, $name:ident, $arg1:expr, $arg2:expr, $arg3:expr, $arg4:expr, $arg5:expr,
-     $arg6:expr, $arg7:expr, $arg8:expr, $arg9:expr, $arg10:expr)
-    => ($crate::sdt_asm!($provider, $name,
-                 "-8@{0} -8@{1} -8@{2} -8@{3} -8@{4} -8@{5} -8@{6} -8@{7} -8@{8} -8@{9}",
-                 $arg1, $arg2, $arg3, $arg4, $arg5, $arg6, $arg7, $arg8, $arg9, $arg10));
-
-    ($provider:ident, $name:ident, $arg1:expr, $arg2:expr, $arg3:expr, $arg4:expr, $arg5:expr,
-     $arg6:expr, $arg7:expr, $arg8:expr, $arg9:expr, $arg10:expr, $arg11:expr)
-    => ($crate::sdt_asm!($provider, $name,
-                 "-8@{0} -8@{1} -8@{2} -8@{3} -8@{4} -8@{5} -8@{6} -8@{7} -8@{8} -8@{9} -8@{10}",
-                 $arg1, $arg2, $arg3, $arg4, $arg5, $arg6, $arg7, $arg8, $arg9, $arg10, $arg11));
-
-    ($provider:ident, $name:ident, $arg1:expr, $arg2:expr, $arg3:expr, $arg4:expr, $arg5:expr,
-     $arg6:expr, $arg7:expr, $arg8:expr, $arg9:expr, $arg10:expr, $arg11:expr, $arg12:expr)
-    => ($crate::sdt_asm!($provider, $name,
-                 "-8@{0} -8@{1} -8@{2} -8@{3} -8@{4} -8@{5} -8@{6} -8@{7} -8@{8} -8@{9} -8@{10} -8@{11}",
-                 $arg1, $arg2, $arg3, $arg4, $arg5, $arg6, $arg7, $arg8, $arg9, $arg10, $arg11,
-                 $arg12));
+            "-{size}@{}", $arg1, $(" -{size}@{}", $arg,)*));
 );
 
-#[cfg(target_arch = "x86")]
+#[cfg(any(target_arch = "x86_64", target_arch = "x86"))]
 #[doc(hidden)]
 #[macro_export]
 macro_rules! sdt_asm(
-    ($provider:ident, $name:ident, $argstr:tt, $($arg:expr),*)
+    ($provider:ident, $name:ident, $($argstr:literal, $arg:expr,)*)
     => (unsafe {
-        $crate::_sdt_asm!(".4byte", options(att_syntax), $provider, $name, $argstr, $($arg),*);
+        $crate::_sdt_asm!(options(att_syntax), $provider, $name, $($argstr, $arg,)*);
     }));
 
-#[cfg(all(target_pointer_width = "32", not(target_arch = "x86")))]
+#[cfg(not(any(target_arch = "x86_64", target_arch = "x86")))]
 #[doc(hidden)]
 #[macro_export]
 macro_rules! sdt_asm(
-    ($provider:ident, $name:ident, $argstr:tt, $($arg:expr),*)
+    ($provider:ident, $name:ident, $($argstr:literal, $arg:expr,)*)
     => (unsafe {
-        $crate::_sdt_asm!(".4byte", options(), $provider, $name, $argstr, $($arg),*);
-    }));
-
-#[cfg(target_arch = "x86_64")]
-#[doc(hidden)]
-#[macro_export]
-macro_rules! sdt_asm(
-    ($provider:ident, $name:ident, $argstr:tt, $($arg:expr),*)
-    => (unsafe {
-        $crate::_sdt_asm!(".8byte", options(att_syntax), $provider, $name, $argstr, $($arg),*);
-    }));
-
-#[cfg(all(target_pointer_width = "64", not(target_arch = "x86_64")))]
-#[doc(hidden)]
-#[macro_export]
-macro_rules! sdt_asm(
-    ($provider:ident, $name:ident, $argstr:tt, $($arg:expr),*)
-    => (unsafe {
-        $crate::_sdt_asm!(".8byte", options(), $provider, $name, $argstr, $($arg),*);
+        $crate::_sdt_asm!(options(), $provider, $name, $($argstr, $arg,)*);
     }));
 
 // Since we can't #include <sys/sdt.h>, we have to reinvent it...
@@ -181,7 +97,7 @@ macro_rules! sdt_asm(
 #[doc(hidden)]
 #[macro_export]
 macro_rules! _sdt_asm(
-    ($addr:tt, options ($($opt:ident),*), $provider:ident, $name:ident, $argstr:tt, $($arg:expr),*) => (
+    (options ($($opt:ident),*), $provider:ident, $name:ident, $($argstr:literal, $arg:expr,)*) => (
         asm!(concat!(r#"
 990:    nop
         .pushsection .note.stapsdt,"?","note"
@@ -189,12 +105,12 @@ macro_rules! _sdt_asm(
         .4byte 992f-991f, 994f-993f, 3
 991:    .asciz "stapsdt"
 992:    .balign 4
-993:    "#, $addr, r#" 990b
-        "#, $addr, r#" _.stapsdt.base
-        "#, $addr, r#" 0 // FIXME set semaphore address
+993:    .{size}byte 990b
+        .{size}byte _.stapsdt.base
+        .{size}byte 0 // FIXME set semaphore address
         .asciz ""#, stringify!($provider), r#""
         .asciz ""#, stringify!($name), r#""
-        .asciz ""#, $argstr, r#""
+        .asciz ""#, $($argstr,)* r#""
 994:    .balign 4
         .popsection
 .ifndef _.stapsdt.base
@@ -208,6 +124,7 @@ _.stapsdt.base: .space 1
 "#
             ),
             $(in(reg) (($arg) as isize) ,)*
+            size = const core::mem::size_of::<isize>(),
             options(readonly, nostack, preserves_flags, $($opt),*),
         )
     ));

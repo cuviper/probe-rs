@@ -137,8 +137,6 @@ mod platform;
 /// ```
 #[macro_export]
 macro_rules! probe(
-    ($provider:ident, $name:ident)
-    => ($crate::platform_probe!($provider, $name,));
-    ($provider:ident, $name:ident, $($arg:expr),*)
-    => ($crate::platform_probe!($provider, $name, $($arg),*));
+    ($provider:ident, $name:ident $(, $arg:expr)* $(,)?)
+    => ($crate::platform_probe!($provider, $name, $($arg,)*));
 );
