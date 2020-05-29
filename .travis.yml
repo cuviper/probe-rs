@@ -1,9 +1,0 @@
-language: rust
-rust: nightly # for unstable feature asm
-script:
-  - cargo build --verbose
-  - cargo test --verbose
-  - cargo doc --verbose
-notifications:
-  email:
-    on_success: never
