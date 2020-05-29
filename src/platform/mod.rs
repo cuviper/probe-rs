@@ -8,10 +8,8 @@
 // option. This file may not be copied, modified, or distributed
 // except according to those terms.
 
-#[cfg(any(target_os = "linux",
-          target_os = "android"))]
+#[cfg(any(target_os = "linux", target_os = "android"))]
 mod systemtap;
 
-#[cfg(not(any(target_os = "linux",
-              target_os = "android")))]
+#[cfg(not(any(target_os = "linux", target_os = "android")))]
 mod default;
