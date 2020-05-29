@@ -181,7 +181,7 @@ macro_rules! sdt_asm(
 #[doc(hidden)]
 #[macro_export]
 macro_rules! _sdt_asm(
-    ($addr:tt, options $opt:tt, $provider:ident, $name:ident, $argstr:tt, $($arg:expr),*) => (
+    ($addr:tt, options ($($opt:ident),*), $provider:ident, $name:ident, $argstr:tt, $($arg:expr),*) => (
         asm!(concat!(r#"
 990:    nop
         .pushsection .note.stapsdt,"?","note"
@@ -208,6 +208,6 @@ _.stapsdt.base: .space 1
 "#
             ),
             $(in(reg) (($arg) as isize) ,)*
-            options $opt,
+            options(readonly, nostack, preserves_flags, $($opt),*),
         )
     ));
