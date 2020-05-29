@@ -8,6 +8,7 @@ homepage = "https://github.com/cuviper/rust-libprobe"
 repository = "https://github.com/cuviper/rust-libprobe"
 license = "Apache-2.0 OR MIT"
 edition = "2018"
+exclude = ["/.github/**"]
 
 [lib]
 name = "probe"
