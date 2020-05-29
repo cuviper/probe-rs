@@ -208,6 +208,6 @@ _.stapsdt.base: .space 1
 "#
             ),
             $(in(reg) (($arg) as isize) ,)*
-            options($opt, nomem, nostack, preserves_flags),
+            options($opt, readonly, nostack, preserves_flags),
         )
     ));
