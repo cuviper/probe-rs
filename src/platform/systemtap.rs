@@ -22,10 +22,10 @@
 //!
 //! # Links:
 //!
-//! * https://sourceware.org/systemtap/man/stapprobes.3stap.html#lbAO (see `process.mark`)
-//! * https://sourceware.org/systemtap/wiki/AddingUserSpaceProbingToApps
-//! * https://sourceware.org/systemtap/wiki/UserSpaceProbeImplementation
-//! * https://sourceware.org/gdb/onlinedocs/gdb/Static-Probe-Points.html
+//! * <https://sourceware.org/systemtap/man/stapprobes.3stap.html#lbAP> (see `process.mark`)
+//! * <https://sourceware.org/systemtap/wiki/AddingUserSpaceProbingToApps>
+//! * <https://sourceware.org/systemtap/wiki/UserSpaceProbeImplementation>
+//! * <https://sourceware.org/gdb/onlinedocs/gdb/Static-Probe-Points.html>
 
 //
 // DEVELOPER NOTES
