@@ -104,7 +104,7 @@ mod platform;
 /// * `name`     - An identifier for this specific probe.
 ///
 /// * `arg`...  - Optional data to provide with the probe.  Any expression which
-///   can be cast `as i64` is allowed as an argument.  The arguments might not
+///   can be cast `as isize` is allowed as an argument.  The arguments might not
 ///   be evaluated at all when a debugger is not attached to the probe,
 ///   depending on the platform implementation, so don't rely on side effects.
 ///
