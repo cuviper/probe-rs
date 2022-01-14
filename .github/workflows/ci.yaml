@@ -16,7 +16,7 @@ jobs:
       - name: Install
         uses: actions-rs/toolchain@v1
         with:
-          toolchain: nightly
+          toolchain: beta
           profile: minimal
           override: true
       - name: Build
@@ -48,7 +48,7 @@ jobs:
       - name: Install
         uses: actions-rs/toolchain@v1
         with:
-          toolchain: nightly
+          toolchain: beta
           target: ${{ matrix.target }}
           profile: minimal
           override: true

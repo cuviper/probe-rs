@@ -1,5 +1,3 @@
-#![feature(asm)]
-
 use probe::probe;
 use std::env;
 use std::process::Command;

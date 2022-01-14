@@ -1,13 +1,3 @@
-// Copyright 2014 The Rust Project Developers. See the COPYRIGHT
-// file at the top-level directory of this distribution and at
-// http://rust-lang.org/COPYRIGHT.
-//
-// Licensed under the Apache License, Version 2.0 <LICENSE-APACHE or
-// http://www.apache.org/licenses/LICENSE-2.0> or the MIT license
-// <LICENSE-MIT or http://opensource.org/licenses/MIT>, at your
-// option. This file may not be copied, modified, or distributed
-// except according to those terms.
-
 //! SystemTap static probes
 //!
 //! This is a mechanism for developers to provide static annotations for
@@ -22,10 +12,10 @@
 //!
 //! # Links:
 //!
-//! * https://sourceware.org/systemtap/man/stapprobes.3stap.html#lbAO (see `process.mark`)
-//! * https://sourceware.org/systemtap/wiki/AddingUserSpaceProbingToApps
-//! * https://sourceware.org/systemtap/wiki/UserSpaceProbeImplementation
-//! * https://sourceware.org/gdb/onlinedocs/gdb/Static-Probe-Points.html
+//! * <https://sourceware.org/systemtap/man/stapprobes.3stap.html#lbAP> (see `process.mark`)
+//! * <https://sourceware.org/systemtap/wiki/AddingUserSpaceProbingToApps>
+//! * <https://sourceware.org/systemtap/wiki/UserSpaceProbeImplementation>
+//! * <https://sourceware.org/gdb/onlinedocs/gdb/Static-Probe-Points.html>
 
 //
 // DEVELOPER NOTES
@@ -63,33 +53,46 @@
 // that log!() checks log_enabled!() first.
 //
 
+#[cfg(target_pointer_width = "32")]
 #[doc(hidden)]
 #[macro_export]
 macro_rules! platform_probe(
     ($provider:ident, $name:ident,)
-    => ($crate::sdt_asm!($provider, $name,));
+    => ($crate::sdt_asm!(4, $provider, $name,));
 
     ($provider:ident, $name:ident, $arg1:expr, $($arg:expr,)*)
-    => ($crate::sdt_asm!($provider, $name,
-            "-{size}@{}", $arg1, $(" -{size}@{}", $arg,)*));
+    => ($crate::sdt_asm!(4, $provider, $name,
+            "-4@{}", $arg1, $(" -4@{}", $arg,)*));
+);
+
+#[cfg(target_pointer_width = "64")]
+#[doc(hidden)]
+#[macro_export]
+macro_rules! platform_probe(
+    ($provider:ident, $name:ident,)
+    => ($crate::sdt_asm!(8, $provider, $name,));
+
+    ($provider:ident, $name:ident, $arg1:expr, $($arg:expr,)*)
+    => ($crate::sdt_asm!(8, $provider, $name,
+            "-8@{}", $arg1, $(" -8@{}", $arg,)*));
 );
 
 #[cfg(any(target_arch = "x86_64", target_arch = "x86"))]
 #[doc(hidden)]
 #[macro_export]
 macro_rules! sdt_asm(
-    ($provider:ident, $name:ident, $($argstr:literal, $arg:expr,)*)
+    ($size:literal, $provider:ident, $name:ident, $($argstr:literal, $arg:expr,)*)
     => (unsafe {
-        $crate::_sdt_asm!(options(att_syntax), $provider, $name, $($argstr, $arg,)*);
+        $crate::_sdt_asm!($size, options(att_syntax), $provider, $name, $($argstr, $arg,)*);
     }));
 
 #[cfg(not(any(target_arch = "x86_64", target_arch = "x86")))]
 #[doc(hidden)]
 #[macro_export]
 macro_rules! sdt_asm(
-    ($provider:ident, $name:ident, $($argstr:literal, $arg:expr,)*)
+    ($size:literal, $provider:ident, $name:ident, $($argstr:literal, $arg:expr,)*)
     => (unsafe {
-        $crate::_sdt_asm!(options(), $provider, $name, $($argstr, $arg,)*);
+        $crate::_sdt_asm!($size, options(), $provider, $name, $($argstr, $arg,)*);
     }));
 
 // Since we can't #include <sys/sdt.h>, we have to reinvent it...
@@ -97,17 +100,17 @@ macro_rules! sdt_asm(
 #[doc(hidden)]
 #[macro_export]
 macro_rules! _sdt_asm(
-    (options ($($opt:ident),*), $provider:ident, $name:ident, $($argstr:literal, $arg:expr,)*) => (
-        asm!(concat!(r#"
+    ($size:literal, options ($($opt:ident),*), $provider:ident, $name:ident, $($argstr:literal, $arg:expr,)*) => (
+        ::core::arch::asm!(concat!(r#"
 990:    nop
         .pushsection .note.stapsdt,"?","note"
         .balign 4
         .4byte 992f-991f, 994f-993f, 3
 991:    .asciz "stapsdt"
 992:    .balign 4
-993:    .{size}byte 990b
-        .{size}byte _.stapsdt.base
-        .{size}byte 0 // FIXME set semaphore address
+993:    ."#, $size, r#"byte 990b
+        ."#, $size, r#"byte _.stapsdt.base
+        ."#, $size, r#"byte 0 // FIXME set semaphore address
         .asciz ""#, stringify!($provider), r#""
         .asciz ""#, stringify!($name), r#""
         .asciz ""#, $($argstr,)* r#""
@@ -124,7 +127,6 @@ _.stapsdt.base: .space 1
 "#
             ),
             $(in(reg) (($arg) as isize) ,)*
-            size = const core::mem::size_of::<isize>(),
             options(readonly, nostack, preserves_flags, $($opt),*),
         )
     ));

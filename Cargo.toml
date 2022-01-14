@@ -1,13 +1,13 @@
 [project]
 name = "probe"
-version = "0.2.1"
+version = "0.3.0"
 authors = ["Josh Stone <cuviper@gmail.com>"]
 description = "Static instrumentation probes"
 documentation = "https://docs.rs/probe/"
 homepage = "https://github.com/cuviper/rust-libprobe"
 repository = "https://github.com/cuviper/rust-libprobe"
 license = "Apache-2.0 OR MIT"
-edition = "2018"
+edition = "2021"
 exclude = ["/.github/**"]
 
 [lib]

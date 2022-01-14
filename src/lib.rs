@@ -1,18 +1,8 @@
-// Copyright 2014 The Rust Project Developers. See the COPYRIGHT
-// file at the top-level directory of this distribution and at
-// http://rust-lang.org/COPYRIGHT.
-//
-// Licensed under the Apache License, Version 2.0 <LICENSE-APACHE or
-// http://www.apache.org/licenses/LICENSE-2.0> or the MIT license
-// <LICENSE-MIT or http://opensource.org/licenses/MIT>, at your
-// option. This file may not be copied, modified, or distributed
-// except according to those terms.
-
 //! This crate provides static instrumentation macros.
 //!
 //! With the `probe!` macro, programmers can place static instrumentation
-//! points in their code to mark events of interest.  These are compiled into
-//! platform-specific implementations, e.g. SystemTap SDT on Linux.  Probes are
+//! points in their code to mark events of interest. These are compiled into
+//! platform-specific implementations, e.g. SystemTap SDT on Linux. Probes are
 //! designed to have negligible overhead during normal operation, so they can
 //! be present in all builds, and only activated using those external tools.
 //!
@@ -23,7 +13,6 @@
 //! intermediate total.
 //!
 //! ```rust
-//! #![feature(asm)]
 //! use probe::probe;
 //! fn main() {
 //!     probe!(foo, begin);
@@ -89,14 +78,6 @@
 //! $2 = 1035
 //! ```
 
-#![crate_name = "probe"]
-#![crate_type = "rlib"]
-#![doc(
-    html_logo_url = "http://www.rust-lang.org/logos/rust-logo-128x128-blk-v2.png",
-    html_favicon_url = "http://www.rust-lang.org/favicon.ico",
-    html_root_url = "http://doc.rust-lang.org/nightly/"
-)]
-#![feature(asm)]
 #![no_std]
 
 mod platform;
@@ -112,15 +93,14 @@ mod platform;
 ///
 /// * `name`     - An identifier for this specific probe.
 ///
-/// * `arg`...  - Optional data to provide with the probe.  Any expression which
-///   can be cast `as i64` is allowed as an argument.  The arguments might not
+/// * `arg`...   - Optional data to provide with the probe. Any expression which
+///   can be cast `as isize` is allowed as an argument. The arguments might not
 ///   be evaluated at all when a debugger is not attached to the probe,
 ///   depending on the platform implementation, so don't rely on side effects.
 ///
 /// # Example
 ///
 /// ```
-/// #![feature(asm)]
 /// use probe::probe;
 /// fn main() {
 ///     probe!(foo, main);

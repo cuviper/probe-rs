@@ -1,4 +1,3 @@
-#![feature(asm)]
 use probe::probe;
 fn main() {
     probe!(foo, begin);
