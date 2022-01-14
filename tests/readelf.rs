@@ -1,5 +1,3 @@
-#![feature(asm_const)]
-
 use probe::probe;
 use std::env;
 use std::process::Command;
