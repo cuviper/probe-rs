@@ -1,8 +1,8 @@
 //! This crate provides static instrumentation macros.
 //!
 //! With the `probe!` macro, programmers can place static instrumentation
-//! points in their code to mark events of interest.  These are compiled into
-//! platform-specific implementations, e.g. SystemTap SDT on Linux.  Probes are
+//! points in their code to mark events of interest. These are compiled into
+//! platform-specific implementations, e.g. SystemTap SDT on Linux. Probes are
 //! designed to have negligible overhead during normal operation, so they can
 //! be present in all builds, and only activated using those external tools.
 //!
@@ -93,8 +93,8 @@ mod platform;
 ///
 /// * `name`     - An identifier for this specific probe.
 ///
-/// * `arg`...  - Optional data to provide with the probe.  Any expression which
-///   can be cast `as isize` is allowed as an argument.  The arguments might not
+/// * `arg`...   - Optional data to provide with the probe. Any expression which
+///   can be cast `as isize` is allowed as an argument. The arguments might not
 ///   be evaluated at all when a debugger is not attached to the probe,
 ///   depending on the platform implementation, so don't rely on side effects.
 ///
