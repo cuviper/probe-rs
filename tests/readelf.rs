@@ -1,4 +1,4 @@
-#![feature(asm)]
+#![feature(asm_const)]
 
 use probe::probe;
 use std::env;

@@ -98,7 +98,7 @@ macro_rules! sdt_asm(
 #[macro_export]
 macro_rules! _sdt_asm(
     (options ($($opt:ident),*), $provider:ident, $name:ident, $($argstr:literal, $arg:expr,)*) => (
-        asm!(concat!(r#"
+        ::core::arch::asm!(concat!(r#"
 990:    nop
         .pushsection .note.stapsdt,"?","note"
         .balign 4

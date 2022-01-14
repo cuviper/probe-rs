@@ -23,7 +23,7 @@
 //! intermediate total.
 //!
 //! ```rust
-//! #![feature(asm)]
+//! #![feature(asm_const)]
 //! use probe::probe;
 //! fn main() {
 //!     probe!(foo, begin);
@@ -96,7 +96,7 @@
     html_favicon_url = "http://www.rust-lang.org/favicon.ico",
     html_root_url = "http://doc.rust-lang.org/nightly/"
 )]
-#![feature(asm)]
+#![feature(asm_const)]
 #![no_std]
 
 mod platform;
@@ -120,7 +120,7 @@ mod platform;
 /// # Example
 ///
 /// ```
-/// #![feature(asm)]
+/// #![feature(asm_const)]
 /// use probe::probe;
 /// fn main() {
 ///     probe!(foo, main);
