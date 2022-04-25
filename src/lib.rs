@@ -79,6 +79,7 @@
 //! ```
 
 #![no_std]
+#![feature(asm_sym)]
 
 mod platform;
 

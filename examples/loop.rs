@@ -1,11 +1,16 @@
+#![feature(asm_sym)]
+
 use probe::probe;
+
 fn main() {
-    probe!(foo, begin);
-    let mut total = 0;
-    for i in 0..100 {
-        total += i;
-        probe!(foo, loop, i, total);
+    let mut iter = 0;
+    loop {
+        iter += 1;
+        probe!(foo, iter, {
+            std::thread::sleep(std::time::Duration::from_secs(1));
+            iter
+        });
     }
-    assert_eq!(total, 4950);
-    probe!(foo, end);
 }
+
+// bcc/tools/trace.py -p $(pidof loop) 'u::foo:iter "iter = %d", arg1'
