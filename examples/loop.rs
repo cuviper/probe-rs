@@ -1,5 +1,3 @@
-#![feature(asm_sym)]
-
 use probe::probe;
 
 fn main() {
