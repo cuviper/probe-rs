@@ -101,7 +101,9 @@ macro_rules! sdt_asm(
 #[macro_export]
 macro_rules! _sdt_asm(
     ($size:literal, options ($($opt:ident),*), $provider:ident, $name:ident, $($argstr:literal, $arg:expr,)*) => (
-        ::core::arch::asm!(concat!(r#"
+        static mut SEMAPHORE: u16 = 0;
+        if ::core::ptr::read_volatile(&SEMAPHORE) != 0 {
+            ::core::arch::asm!(concat!(r#"
 990:    nop
         .pushsection .note.stapsdt,"?","note"
         .balign 4
@@ -110,7 +112,7 @@ macro_rules! _sdt_asm(
 992:    .balign 4
 993:    ."#, $size, r#"byte 990b
         ."#, $size, r#"byte _.stapsdt.base
-        ."#, $size, r#"byte 0 // FIXME set semaphore address
+        ."#, $size, r#"byte {}
         .asciz ""#, stringify!($provider), r#""
         .asciz ""#, stringify!($name), r#""
         .asciz ""#, $($argstr,)* r#""
@@ -123,10 +125,10 @@ macro_rules! _sdt_asm(
 _.stapsdt.base: .space 1
         .size _.stapsdt.base, 1
         .popsection
-.endif
-"#
-            ),
-            $(in(reg) (($arg) as isize) ,)*
-            options(readonly, nostack, preserves_flags, $($opt),*),
-        )
+.endif"#),
+                sym SEMAPHORE,
+                $(in(reg) (($arg) as isize) ,)*
+                options(readonly, nostack, preserves_flags, $($opt),*),
+            );
+        }
     ));

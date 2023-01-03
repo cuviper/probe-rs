@@ -1,7 +1,7 @@
 # libprobe: Static probes for Rust
 
 [![probe crate](https://img.shields.io/crates/v/probe.svg)](https://crates.io/crates/probe)
-![minimum rustc 1.59](https://img.shields.io/badge/rustc-1.59+-red.svg)
+![minimum rustc 1.66](https://img.shields.io/badge/rustc-1.66+-red.svg)
 [![probe documentation](https://docs.rs/probe/badge.svg)](https://docs.rs/probe)
 [![build status](https://github.com/cuviper/rust-libprobe/workflows/CI/badge.svg)](https://github.com/cuviper/rust-libprobe/actions)
 
@@ -20,7 +20,7 @@ The recommended way to use it is to add a line into your Cargo.toml such as:
 
 ```toml
 [dependencies]
-probe = "0.3"
+probe = "0.4"
 ```
 
 Then `use probe::probe;` in your code and insert macro calls wherever you want
