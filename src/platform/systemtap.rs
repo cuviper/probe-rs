@@ -126,9 +126,9 @@ _.stapsdt.base: .space 1
         .size _.stapsdt.base, 1
         .popsection
 .endif"#),
-            sym SEMAPHORE,
-            $(in(reg) (($arg) as isize) ,)*
-            options(readonly, nostack, preserves_flags, $($opt),*),
-        );
+                sym SEMAPHORE,
+                $(in(reg) (($arg) as isize) ,)*
+                options(readonly, nostack, preserves_flags, $($opt),*),
+            );
         }
     ));
