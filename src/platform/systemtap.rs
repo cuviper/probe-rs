@@ -102,7 +102,7 @@ macro_rules! sdt_asm(
 macro_rules! _sdt_asm(
     ($size:literal, options ($($opt:ident),*), $provider:ident, $name:ident, $($argstr:literal, $arg:expr,)*) => (
         static SEMAPHORE: u16 = 0;
-        if ::core::ptr::read_volatile(&SEMAPHORE) == 1 {
+        if ::core::ptr::read_volatile(&SEMAPHORE) != 0 {
             ::core::arch::asm!(concat!(r#"
 990:    nop
         .pushsection .note.stapsdt,"?","note"
