@@ -11,24 +11,10 @@ jobs:
     name: Test
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout
-        uses: actions/checkout@v2
-      - name: Install
-        uses: actions-rs/toolchain@v1
-        with:
-          toolchain: 1.66.0
-          profile: minimal
-          override: true
-      - name: Build
-        uses: actions-rs/cargo@v1
-        with:
-          command: build
-          args: --verbose
-      - name: Test
-        uses: actions-rs/cargo@v1
-        with:
-          command: test
-          args: --verbose
+      - uses: actions/checkout@v3
+      - uses: dtolnay/rust-toolchain@1.66.0
+      - run: cargo build --verbose
+      - run: cargo test --verbose
 
   check:
     name: Check
@@ -43,38 +29,18 @@ jobs:
           wasm32-unknown-unknown,
         ]
     steps:
-      - name: Checkout
-        uses: actions/checkout@v1
-      - name: Install
-        uses: actions-rs/toolchain@v1
+      - uses: actions/checkout@v1
+      - uses: dtolnay/rust-toolchain@stable
         with:
-          toolchain: stable
           target: ${{ matrix.target }}
-          profile: minimal
-          override: true
-      - name: Check
-        env:
-          TARGET: thumbv6m-none-eabi
-        uses: actions-rs/cargo@v1
-        with:
-          command: check
-          args: --verbose --lib --tests --examples --target ${{ matrix.target }}
+      - run: cargo check --verbose --lib --tests --examples --target ${{ matrix.target }}
 
   fmt:
     name: Format
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout
-        uses: actions/checkout@v2
-      - name: Install
-        uses: actions-rs/toolchain@v1
+      - uses: actions/checkout@v3
+      - uses: dtolnay/rust-toolchain@stable
         with:
-          profile: minimal
-          toolchain: stable
-          override: true
           components: rustfmt
-      - name: Check formatting
-        uses: actions-rs/cargo@v1
-        with:
-          command: fmt
-          args: --all -- --check
+      - run: cargo fmt --all --check
