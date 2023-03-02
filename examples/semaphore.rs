@@ -1,10 +1,10 @@
-use probe::probe;
+use probe::probe_lazy;
 
 fn main() {
     let mut iter = 0;
     loop {
         iter += 1;
-        probe!(foo, iter, {
+        probe_lazy!(foo, iter, {
             // This delay is an exaggeration of the overhead of a probe argument, but it's only
             // incurred while something is attached to the probe, thanks to the semaphore.
             std::thread::sleep(std::time::Duration::from_secs(1));

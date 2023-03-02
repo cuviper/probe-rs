@@ -1,3 +1,5 @@
+#![cfg(any(target_os = "linux", target_os = "android"))]
+
 use probe::probe;
 use std::env;
 use std::process::Command;
