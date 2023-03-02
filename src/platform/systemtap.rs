@@ -67,6 +67,7 @@ macro_rules! platform_probe(
 #[macro_export]
 macro_rules! platform_probe_lazy(
     ($provider:ident, $name:ident, $($arg:expr,)*) => ({
+        #[link_section = ".probes"]
         static mut SEMAPHORE: u16 = 0;
         let enabled = unsafe { ::core::ptr::read_volatile(&SEMAPHORE) } != 0;
         if enabled {
