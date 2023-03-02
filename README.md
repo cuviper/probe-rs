@@ -20,13 +20,16 @@ The recommended way to use it is to add a line into your Cargo.toml such as:
 
 ```toml
 [dependencies]
-probe = "0.4"
+probe = "0.5"
 ```
 
 Then `use probe::probe;` in your code and insert macro calls wherever you want
 to mark something, `probe!(provider, name, args...)`. The `provider` and `name`
 are identifiers of your choice, and any additional arguments are runtime
 expressions that will be cast `as isize` for the probe consumer to read.
+There is also a `probe_lazy!` variant that tries to avoid evaluating the
+argument expressions when probes aren't in use, if the platform-specific
+implementation allows that to be determined.
 
 ## Rust integration
 
