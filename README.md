@@ -1,9 +1,9 @@
-# libprobe: Static probes for Rust
+# probe: Static probes for Rust
 
 [![probe crate](https://img.shields.io/crates/v/probe.svg)](https://crates.io/crates/probe)
 ![minimum rustc 1.66](https://img.shields.io/badge/rustc-1.66+-red.svg)
 [![probe documentation](https://docs.rs/probe/badge.svg)](https://docs.rs/probe)
-[![build status](https://github.com/cuviper/rust-libprobe/workflows/CI/badge.svg)](https://github.com/cuviper/rust-libprobe/actions)
+[![build status](https://github.com/cuviper/probe-rs/workflows/CI/badge.svg)](https://github.com/cuviper/probe-rs/actions)
 
 With the `probe!` macro, programmers can place static instrumentation
 points in their code to mark events of interest. These are compiled into
@@ -13,7 +13,7 @@ be present in all builds, and only activated using those external tools.
 
 [Documentation](https://docs.rs/probe/)
 
-## Using libprobe
+## Using probe
 
 [`probe!` is available on crates.io](https://crates.io/crates/probe).
 The recommended way to use it is to add a line into your Cargo.toml such as:
@@ -44,7 +44,7 @@ probe points.
 
 ## License
 
-libprobe follows the same license choices as The Rust Project itself, in
+probe follows the same license choices as The Rust Project itself, in
 order to ease a future merge.
 
 See LICENSE-APACHE, LICENSE-MIT, and COPYRIGHT for details.
