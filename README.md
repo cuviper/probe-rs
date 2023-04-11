@@ -44,7 +44,7 @@ probe points.
 
 ## License
 
-probe follows the same license choices as The Rust Project itself, in
-order to ease a future merge.
-
-See LICENSE-APACHE, LICENSE-MIT, and COPYRIGHT for details.
+`probe` is distributed under the terms of both the MIT license and the
+Apache License (Version 2.0). See [LICENSE-APACHE](LICENSE-APACHE) and
+[LICENSE-MIT](LICENSE-MIT) for details. Opening a pull request is
+assumed to signal agreement with these licensing terms.
