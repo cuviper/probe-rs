@@ -1,6 +1,6 @@
 [package]
 name = "probe"
-version = "0.5.0"
+version = "0.5.1"
 authors = ["Josh Stone <cuviper@gmail.com>"]
 description = "Static instrumentation probes"
 documentation = "https://docs.rs/probe/"
