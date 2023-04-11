@@ -31,17 +31,6 @@ There is also a `probe_lazy!` variant that tries to avoid evaluating the
 argument expressions when probes aren't in use, if the platform-specific
 implementation allows that to be determined.
 
-## Rust integration
-
-I hope that this library can eventually be a standard part of the Rust
-distribution -- see the rust [pull request][libprobe-pr] and [original
-enhancement issue][dtrace-issue]. It works fine as a standalone library,
-but if it were incorporated, then even Rust's own libraries could define
-probe points.
-
-[libprobe-pr]: https://github.com/rust-lang/rust/pull/14031
-[dtrace-issue]: https://github.com/rust-lang/rust/issues/6816
-
 ## License
 
 `probe` is distributed under the terms of both the MIT license and the
