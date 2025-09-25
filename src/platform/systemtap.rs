@@ -89,15 +89,18 @@ macro_rules! platform_probe(
 
 #[doc(hidden)]
 #[macro_export]
-macro_rules! platform_probe_lazy(
-    ($provider:ident, $name:ident, $($arg:expr,)*) => ({
+macro_rules! platform_declare_semaphore(
+    ($semaphore:ident) => {
         #[link_section = ".probes"]
-        static SEMAPHORE: $crate::Semaphore = $crate::Semaphore::new();
-        let enabled = SEMAPHORE.enabled();
-        if enabled {
-            $crate::sdt!([sym "{}" SEMAPHORE], $provider, $name, $($arg,)*);
-        }
-        enabled
+        static $semaphore: $crate::Semaphore = $crate::Semaphore::new();
+    }
+);
+
+#[doc(hidden)]
+#[macro_export]
+macro_rules! platform_probe_lazy(
+    ($semaphore:ident, $provider:ident, $name:ident, $($arg:expr,)*) => ({
+        $crate::sdt!([sym "{}" $semaphore], $provider, $name, $($arg,)*);
     })
 );
 

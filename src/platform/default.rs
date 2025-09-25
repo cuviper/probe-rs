@@ -1,9 +1,8 @@
-#[repr(transparent)]
 pub struct Semaphore;
 
 impl Semaphore {
     /// Return a `Semaphore` that starts as disabled.
-    pub const fn new() -> self {
+    pub const fn new() -> Self {
         Self
     }
 
@@ -25,12 +24,18 @@ macro_rules! platform_probe(
 
 #[doc(hidden)]
 #[macro_export]
+macro_rules! platform_declare_semaphore(
+    ($semaphore:ident) => {
+        static $semaphore: $crate::Semaphore = $crate::Semaphore::new();
+    }
+);
+
+#[doc(hidden)]
+#[macro_export]
 macro_rules! platform_probe_lazy(
-    ($provider:ident, $name:ident, $($arg:expr,)*) => ({
+    ($semaphore:ident, $provider:ident, $name:ident, $($arg:expr,)*) => ({
+        // The caller wraps this with what is effectively "if false"
         // Expand the arguments so they don't cause unused warnings.
-        if false {
-            let _ = ($($arg,)*);
-        }
-        false
+        let _ = ($($arg,)*);
     })
 );

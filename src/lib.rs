@@ -145,7 +145,14 @@ macro_rules! probe(
 #[macro_export]
 macro_rules! probe_lazy(
     ($provider:ident, $name:ident $(, $arg:expr)* $(,)?)
-    => ($crate::platform_probe_lazy!($provider, $name, $($arg,)*));
+    => ({
+        $crate::platform_declare_semaphore!(SEMAPHORE);
+        let enabled = SEMAPHORE.enabled();
+        if enabled {
+            $crate::platform_probe_lazy!(SEMAPHORE, $provider, $name, $($arg,)*);
+        }
+        enabled
+    })
 );
 
 /// A location that represents whether a tracepoint was enabled.
