@@ -14,3 +14,6 @@ exclude = ["/.github/**"]
 [lib]
 name = "probe"
 crate-type = ["rlib"]
+
+[lints.clippy]
+new_without_default = "allow"

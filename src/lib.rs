@@ -147,3 +147,13 @@ macro_rules! probe_lazy(
     ($provider:ident, $name:ident $(, $arg:expr)* $(,)?)
     => ($crate::platform_probe_lazy!($provider, $name, $($arg,)*));
 );
+
+/// A location that represents whether a tracepoint was enabled.
+///
+/// [`probe_lazy!`] uses a [`Semaphore`] to guard evaluation of
+/// arguments.  A platform-specific mechanism ensures that [`Semaphore::enabled`]
+/// returns `true` when a debugger or tracing tool is attached to the probe.
+///
+/// Note that, if a platform implementation can't determine that, it might
+/// always return `true`.
+pub use platform::Semaphore;

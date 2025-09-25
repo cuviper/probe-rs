@@ -17,6 +17,9 @@
 //! * <https://sourceware.org/systemtap/wiki/UserSpaceProbeImplementation>
 //! * <https://sourceware.org/gdb/onlinedocs/gdb/Static-Probe-Points.html>
 
+use core::cell::UnsafeCell;
+use core::ptr;
+
 //
 // DEVELOPER NOTES
 //
@@ -55,6 +58,27 @@
 // when there's nobody attached to see the probe.
 //
 
+#[repr(transparent)]
+pub struct Semaphore(UnsafeCell<u16>);
+
+// SAFETY: the UnsafeCell is only ever read as far as Rust is
+// concerned; data races require a read and a write.
+unsafe impl Sync for Semaphore {}
+
+impl Semaphore {
+    /// Return a `Semaphore` that starts as disabled.
+    pub const fn new() -> Self {
+        Self(UnsafeCell::new(0))
+    }
+
+    /// Return whether a debugger or tracing tool is attached to a probe
+    /// that uses this semaphore.
+    #[inline(always)]
+    pub fn enabled(&self) -> bool {
+        (unsafe { ptr::read_volatile(self.0.get() as *const _) }) != 0u16
+    }
+}
+
 #[doc(hidden)]
 #[macro_export]
 macro_rules! platform_probe(
@@ -68,8 +92,8 @@ macro_rules! platform_probe(
 macro_rules! platform_probe_lazy(
     ($provider:ident, $name:ident, $($arg:expr,)*) => ({
         #[link_section = ".probes"]
-        static mut SEMAPHORE: u16 = 0;
-        let enabled = unsafe { ::core::ptr::read_volatile(&SEMAPHORE) } != 0;
+        static SEMAPHORE: $crate::Semaphore = $crate::Semaphore::new();
+        let enabled = SEMAPHORE.enabled();
         if enabled {
             $crate::sdt!([sym "{}" SEMAPHORE], $provider, $name, $($arg,)*);
         }
