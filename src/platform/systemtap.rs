@@ -99,7 +99,7 @@ macro_rules! platform_declare_semaphore(
 #[doc(hidden)]
 #[macro_export]
 macro_rules! platform_probe_lazy(
-    ($semaphore:ident, $provider:ident, $name:ident, $($arg:expr,)*) => ({
+    ($semaphore:path, $provider:ident, $name:ident, $($arg:expr,)*) => ({
         $crate::sdt!([sym "{}" $semaphore], $provider, $name, $($arg,)*);
     })
 );
@@ -109,7 +109,7 @@ macro_rules! platform_probe_lazy(
 #[doc(hidden)]
 #[macro_export]
 macro_rules! sdt(
-    ([sym $symstr:literal $($sym:ident)?],
+    ([sym $symstr:literal $($sym:path)?],
         $provider:ident, $name:ident, $($arg:expr,)*
     ) => (
         #[cfg(any(target_arch = "x86_64", target_arch = "x86"))]
@@ -121,7 +121,7 @@ macro_rules! sdt(
             $provider, $name, $($arg,)*);
     );
 
-    ([sym $symstr:literal $($sym:ident)?, opt $($opt:ident)?],
+    ([sym $symstr:literal $($sym:path)?, opt $($opt:ident)?],
         $provider:ident, $name:ident, $($arg1:expr, $($arg:expr,)*)?
     ) => (
         #[cfg(target_pointer_width = "32")]
@@ -133,7 +133,7 @@ macro_rules! sdt(
             $provider, $name, $("-8@{}", $arg1, $(" -8@{}", $arg,)*)?);
     );
 
-    ([sym $symstr:literal $($sym:ident)?, opt $($opt:ident)?, size $size:literal],
+    ([sym $symstr:literal $($sym:path)?, opt $($opt:ident)?, size $size:literal],
         $provider:ident, $name:ident, $($argstr:literal, $arg:expr,)*
     ) => (unsafe {
         ::core::arch::asm!(concat!(r#"

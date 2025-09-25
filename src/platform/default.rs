@@ -33,7 +33,7 @@ macro_rules! platform_declare_semaphore(
 #[doc(hidden)]
 #[macro_export]
 macro_rules! platform_probe_lazy(
-    ($semaphore:ident, $provider:ident, $name:ident, $($arg:expr,)*) => ({
+    ($semaphore:path, $provider:ident, $name:ident, $($arg:expr,)*) => ({
         // The caller wraps this with what is effectively "if false"
         // Expand the arguments so they don't cause unused warnings.
         let _ = ($($arg,)*);
