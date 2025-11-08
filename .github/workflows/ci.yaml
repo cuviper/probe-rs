@@ -12,6 +12,10 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
+      # Test with image's stable Rust first
+      - run: cargo build --verbose
+      - run: cargo test --verbose
+      # Test with our MSRV
       - uses: dtolnay/rust-toolchain@1.66.0
       - run: cargo build --verbose
       - run: cargo test --verbose
