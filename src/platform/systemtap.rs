@@ -125,7 +125,7 @@ macro_rules! sdt(
 994:    .balign 4
         .popsection
 .ifndef _.stapsdt.base
-        .pushsection .stapsdt.base,"aG","progbits",.stapsdt.base,comdat
+        .pushsection .stapsdt.base,"aGR","progbits",.stapsdt.base,comdat
         .weak _.stapsdt.base
         .hidden _.stapsdt.base
 _.stapsdt.base: .space 1

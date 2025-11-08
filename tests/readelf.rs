@@ -32,3 +32,23 @@ fn check_notes() {
         .count();
     assert_eq!(count, 2);
 }
+
+#[test]
+fn check_base() {
+    // No need to create further probes. The ones introduced by check_notes are
+    // enough.
+    // Make sure readelf can find ".stapsdt.base" ELF section in the executable
+    let test_exe = env::current_exe().unwrap();
+    let output = Command::new("readelf")
+        .arg("-S")
+        .arg(&test_exe)
+        .output()
+        .unwrap();
+    assert!(output.status.success());
+
+    let count = String::from_utf8_lossy(&output.stdout)
+        .lines()
+        .filter(|line| line.contains("stapsdt.base"))
+        .count();
+    assert_eq!(count, 1);
+}
