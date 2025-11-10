@@ -17,6 +17,9 @@
 //! * <https://sourceware.org/systemtap/wiki/UserSpaceProbeImplementation>
 //! * <https://sourceware.org/gdb/onlinedocs/gdb/Static-Probe-Points.html>
 
+use core::cell::UnsafeCell;
+use core::ptr;
+
 //
 // DEVELOPER NOTES
 //
@@ -55,6 +58,27 @@
 // when there's nobody attached to see the probe.
 //
 
+#[repr(transparent)]
+pub struct Semaphore(UnsafeCell<u16>);
+
+// SAFETY: the UnsafeCell is only ever read as far as Rust is
+// concerned; data races require a read and a write.
+unsafe impl Sync for Semaphore {}
+
+impl Semaphore {
+    /// Return a `Semaphore` that starts as disabled.
+    pub const fn new() -> Self {
+        Self(UnsafeCell::new(0))
+    }
+
+    /// Return whether a debugger or tracing tool is attached to a probe
+    /// that uses this semaphore.
+    #[inline(always)]
+    pub fn enabled(&self) -> bool {
+        (unsafe { ptr::read_volatile(self.0.get() as *const _) }) != 0u16
+    }
+}
+
 #[doc(hidden)]
 #[macro_export]
 macro_rules! platform_probe(
@@ -65,15 +89,18 @@ macro_rules! platform_probe(
 
 #[doc(hidden)]
 #[macro_export]
-macro_rules! platform_probe_lazy(
-    ($provider:ident, $name:ident, $($arg:expr,)*) => ({
+macro_rules! platform_declare_semaphore(
+    ($semaphore:ident) => {
         #[link_section = ".probes"]
-        static mut SEMAPHORE: u16 = 0;
-        let enabled = unsafe { ::core::ptr::read_volatile(&SEMAPHORE) } != 0;
-        if enabled {
-            $crate::sdt!([sym "{}" SEMAPHORE], $provider, $name, $($arg,)*);
-        }
-        enabled
+        static $semaphore: $crate::Semaphore = $crate::Semaphore::new();
+    }
+);
+
+#[doc(hidden)]
+#[macro_export]
+macro_rules! platform_probe_lazy(
+    ($semaphore:path, $provider:ident, $name:ident, $($arg:expr,)*) => ({
+        $crate::sdt!([sym "{}" $semaphore], $provider, $name, $($arg,)*);
     })
 );
 
@@ -82,7 +109,7 @@ macro_rules! platform_probe_lazy(
 #[doc(hidden)]
 #[macro_export]
 macro_rules! sdt(
-    ([sym $symstr:literal $($sym:ident)?],
+    ([sym $symstr:literal $($sym:path)?],
         $provider:ident, $name:ident, $($arg:expr,)*
     ) => (
         #[cfg(any(target_arch = "x86_64", target_arch = "x86"))]
@@ -94,7 +121,7 @@ macro_rules! sdt(
             $provider, $name, $($arg,)*);
     );
 
-    ([sym $symstr:literal $($sym:ident)?, opt $($opt:ident)?],
+    ([sym $symstr:literal $($sym:path)?, opt $($opt:ident)?],
         $provider:ident, $name:ident, $($arg1:expr, $($arg:expr,)*)?
     ) => (
         #[cfg(target_pointer_width = "32")]
@@ -106,7 +133,7 @@ macro_rules! sdt(
             $provider, $name, $("-8@{}", $arg1, $(" -8@{}", $arg,)*)?);
     );
 
-    ([sym $symstr:literal $($sym:ident)?, opt $($opt:ident)?, size $size:literal],
+    ([sym $symstr:literal $($sym:path)?, opt $($opt:ident)?, size $size:literal],
         $provider:ident, $name:ident, $($argstr:literal, $arg:expr,)*
     ) => (unsafe {
         ::core::arch::asm!(concat!(r#"

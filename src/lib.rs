@@ -14,16 +14,14 @@
 //!
 //! ```rust
 //! use probe::probe;
-//! fn main() {
-//!     probe!(foo, begin);
-//!     let mut total = 0;
-//!     for i in 0..100 {
-//!         total += i;
-//!         probe!(foo, loop, i, total);
-//!     }
-//!     assert_eq!(total, 4950);
-//!     probe!(foo, end);
+//! probe!(foo, begin);
+//! let mut total = 0;
+//! for i in 0..100 {
+//!     total += i;
+//!     probe!(foo, loop, i, total);
 //! }
+//! assert_eq!(total, 4950);
+//! probe!(foo, end);
 //! ```
 //!
 //! ## Using probes with SystemTap
@@ -146,6 +144,34 @@ macro_rules! probe(
 /// ```
 #[macro_export]
 macro_rules! probe_lazy(
+    (extern $semaphore:path, $provider:ident, $name:ident $(, $arg:expr)* $(,)?)
+    => ({
+        // Type-check the location to have 'static lifetime, so it is safe to
+        // put it in the stapsdt note.  The program cannot really do
+        // anything with it---the only available method is enabled(); therefore,
+        // even though not placing it in the .probes section could upset the tracing
+        // tool, it cannot be used to trigger undefined behavior.
+        let semaphore: &'static $crate::Semaphore = &$semaphore;
+        let enabled = semaphore.enabled();
+        if enabled {
+            $crate::platform_probe_lazy!($semaphore, $provider, $name, $($arg,)*);
+        }
+        enabled
+    });
+
     ($provider:ident, $name:ident $(, $arg:expr)* $(,)?)
-    => ($crate::platform_probe_lazy!($provider, $name, $($arg,)*));
+    => ({
+        $crate::platform_declare_semaphore!(SEMAPHORE);
+        $crate::probe_lazy!(extern SEMAPHORE, $provider, $name, $($arg,)*)
+    });
 );
+
+/// A location that represents whether a tracepoint was enabled.
+///
+/// [`probe_lazy!`] uses a [`Semaphore`] to guard evaluation of
+/// arguments.  A platform-specific mechanism ensures that [`Semaphore::enabled`]
+/// returns `true` when a debugger or tracing tool is attached to the probe.
+///
+/// Note that, if a platform implementation can't determine that, it might
+/// always return `true`.
+pub use platform::Semaphore;
